@@ -8,7 +8,7 @@
 
 Для запуска программы требуется:
 
-1) Клонировать данный репозиторий ``git clone https://github.com/tymoorchik/BND_LLC-TestTask``.
+1) Клонировать данный репозиторий ``git clone https://github.com/tymoorchik/BND_LLC-TestTask.git``.
 2) Установить требуемые модули ``pip install -r requirements.txt``.
 3) Запустить программу ``python main.py``.
 
