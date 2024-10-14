@@ -3,11 +3,11 @@ import numpy as np
 from art import tprint
 
 
-def apply_yolo_object_detection(image_to_process):
+def object_detection(image):
     "Поиск на кадре людей"
 
-    height, width, _ = image_to_process.shape
-    blob = cv2.dnn.blobFromImage(image_to_process, 1 / 255, (608, 608), (0, 0, 0), swapRB=True, crop=False)
+    height, width, _ = image.shape
+    blob = cv2.dnn.blobFromImage(image, 1 / 255, (608, 608), (0, 0, 0), swapRB=True, crop=False)
 
     #Модель начинает искать
     net.setInput(blob)
@@ -32,16 +32,16 @@ def apply_yolo_object_detection(image_to_process):
     #Отбор людей
     chosen_boxes = cv2.dnn.NMSBoxes(boxes, class_scores, 0.0, 0.4)
     for box_index in chosen_boxes:
-        image_to_process = draw_object_bounding_box(image_to_process, boxes[box_index])
+        image = draw_object(image, boxes[box_index])
 
-    return image_to_process
+    return image
 
 
-def draw_object_bounding_box(image_to_process, box):
+def draw_object(image, box):
     "Отрисовка рамок для людей"
 
     font = cv2.FONT_HERSHEY_SIMPLEX
-    final_image = cv2.rectangle(image_to_process, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (0, 255, 0), 1)
+    final_image = cv2.rectangle(image, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (0, 255, 0), 1)
     final_image = cv2.putText(final_image, 'person', (box[0], box[1] - 10), font, 1, (0, 255, 0), 1, cv2.LINE_AA)
 
     return final_image
@@ -64,7 +64,7 @@ def start_video_object_detection(video: str):
                     return 0
 
                 #Читаем кадр и изменяем согласно найденным объектам
-                frame = apply_yolo_object_detection(frame)
+                frame = object_detection(frame)
                 out.write(frame)
 
                 #Отображаем кадр
